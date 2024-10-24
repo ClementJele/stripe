@@ -12,7 +12,7 @@ const apiKeyAuth = require('../Authorization/auth');
 require('dotenv').config();
 
 // GLOBAL VARIABLES
-const PORT = process.env.ENV || 3000;
+const PORT = process.env.ENV || 3006;
 const database = process.env.MONGO_DATABASE_CONNECT;
 const schemaFields = ["name", "description", "date", "duration", "location", "poster", "capacity", "creator"];
 

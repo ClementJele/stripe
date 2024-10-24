@@ -23,8 +23,8 @@ app.post('/create-payment-intent', async (req, res) => {
     if (!items || !items.length) {
       throw new Error('No items provided');
     }
-    console.log('Amount received from frontend (in Rands):', items[0].amount);
-    const amountInCents = Math.round(items[0].amount * 100);
+    console.log('Amount received from frontend (in Rands):', items[0].amount/100);
+    const amountInCents = Math.round(items[0].amount *100);
     const paymentIntent = await stripe.paymentIntents.create({
       amount: items[0].amount, // Stripe expects amount in cents
       currency: 'zar',

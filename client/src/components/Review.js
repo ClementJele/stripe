@@ -2,16 +2,86 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 
+const containerStyle = {
+  maxWidth: '600px',
+  margin: '40px auto',
+  padding: '20px',
+  background: 'linear-gradient(to right,#bfbfbf, #f7f7f7, #b4b4b4)',
+  borderRadius: '10px',
+  boxShadow: '-10px 20px 10px rgba(0, 0, 5, 0.6)',
+};
+
+const headingStyle = {
+  textAlign: 'center',
+  color: '#333',
+  marginBottom: '20px',
+  backgroundColor: 'transparent'
+};
+
+const formStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+};
+
+const ratingSectionStyle = {
+  marginBottom: '20px',
+};
+
+const starsStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+};
+
+const starStyle = (filled) => ({
+  fontSize: '30px',
+  color: filled ? '#f1c40f' : '#ccc',
+  cursor: 'pointer',
+  transition: 'color 0.3s',
+});
+
+const feedbackSectionStyle = {
+  marginBottom: '20px',
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '9px',
+};
+
+const textareaStyle = {
+  width: '100%',
+  padding: '10px',
+  border: '1px solid #ddd',
+  borderRadius: '5px',
+  fontSize: '16px',
+  resize: 'none',
+};
+
+const submitBtnStyle = {
+  backgroundColor: '#007bff',
+  color: 'white',
+  padding: '10px 20px',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '18px',
+  transition: 'background-color 0.3s',
+};
+
+const submitBtnHoverStyle = {
+  backgroundColor: '#0056b3',
+};
+
 const Review = () => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
-  const userID = localStorage.getItem('userID') || sessionStorage.getItem('userID'); 
-  console.log(userID, 'user id')
-  const user = JSON.parse(sessionStorage.getItem('user'));
-  console.log(user._id)
 
-  const User = user._id
+  // Parse user object from sessionStorage
+  const user = JSON.parse(sessionStorage.getItem('user')) || {};
+  const userID = user._id || null; // Safely get user._id
 
+  console.log(userID, 'User ID');
+  console.log(user, 'User Object');
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -24,13 +94,17 @@ const Review = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
+    if (!userID) {
+      alert('User not logged in!');
+      return;
+    }
+  
     const reviewData = {
-      rating: rating, 
-      feedback: feedback, 
-      userID: User, 
+      rating,
+      feedback,
+      userID,
     };
   
-
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_REVIEW}/api/reviews`,
@@ -42,14 +116,12 @@ const Review = () => {
           },
         }
       );
-
-      if (response.status === 200) {
-        const result = response.data;
-        console.log(result);
+  
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response.data);
         alert('Review submitted successfully!');
-
-        setRating(0); // Reset rating
-        setFeedback(''); // Clear feedback
+        setRating(0);
+        setFeedback('');
       } else {
         alert('Failed to submit review');
       }
@@ -57,81 +129,8 @@ const Review = () => {
       console.error('Error:', error);
       alert('An error occurred while submitting the review');
     }
-
   };
   
-  
-  
-
-  const containerStyle = {
-    maxWidth: '600px',
-    margin: '40px auto',
-    padding: '20px',
-    backgroundColor: '#99999996',
-    borderRadius: '10px',
-    boxShadow: '-10px 20px 10px rgba(0, 0, 5, 0.6)',
-  };
-
-  const headingStyle = {
-    textAlign: 'center',
-    color: '#333',
-    marginBottom: '20px',
-    backgroundColor: 'transparent'
-  };
-
-  const formStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  };
-
-  const ratingSectionStyle = {
-    marginBottom: '20px',
-  };
-
-  const starsStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-  };
-
-  const starStyle = (filled) => ({
-    fontSize: '30px',
-    color: filled ? '#f1c40f' : '#ccc',
-    cursor: 'pointer',
-    transition: 'color 0.3s',
-  });
-
-  const feedbackSectionStyle = {
-    marginBottom: '20px',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '9px',
-  };
-
-  const textareaStyle = {
-    width: '100%',
-    padding: '10px',
-    border: '1px solid #ddd',
-    borderRadius: '5px',
-    fontSize: '16px',
-    resize: 'none',
-  };
-
-  const submitBtnStyle = {
-    backgroundColor: '#007bff',
-    color: 'white',
-    padding: '10px 20px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '18px',
-    transition: 'background-color 0.3s',
-  };
-
-  const submitBtnHoverStyle = {
-    backgroundColor: '#0056b3',
-  };
 
   return (
     <div style={containerStyle}>

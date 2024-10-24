@@ -6,6 +6,7 @@ import axios from 'axios';
 import { fetchEvents } from '../Requests/events';
 import { likeEvent, dislikeEvent } from '../Requests/events';
 import { userLikesEvent } from '../Requests/users';
+import '../../src/globals.css'
 
 const like = async (e, eventID) => {
     e.stopPropagation();
@@ -49,7 +50,8 @@ const DisplayEvents = ({ filteredEvents, route}) => {
     }
     else{
         return (
-            <div className="past-events">
+            <div className="past-events-container">
+                <div className="past-events">
                 {events.map(event => (
                     <div key={event.id}>
                         <Link to={`/${route}/${event.id}`} className="event">
@@ -71,6 +73,8 @@ const DisplayEvents = ({ filteredEvents, route}) => {
                     </div>
                 ))}
             </div>
+            </div>
+           
         );
     }
 };

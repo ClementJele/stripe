@@ -442,3 +442,33 @@ select.stripe {
   #icon-holder {
     margin-bottom: 20px;
   }
+
+  .error-message{
+    display: block;
+    flex-direction: column;
+    background-color: rgb(249, 25, 25);
+    /* background: transparent; */
+    justify-content: center;
+    align-items: center;
+    border-radius: 9px;
+    color:#ffffff;
+    padding: 30px;
+    margin: 15em;
+
+    p{
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+    }
+    
+    button:hover{
+      background-color: #6f68f7;
+    }
+  }

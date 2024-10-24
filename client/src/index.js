@@ -14,5 +14,6 @@ root.render(
     }}
   >
     <App />
-  </Auth0Provider>,
+  </Auth0Provider>
+
 );

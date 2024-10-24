@@ -132,7 +132,7 @@ export default function CompletePage() {
       setRedirecting(true);
       const timer = setTimeout(() => {
         navigate('/tickets');
-      }, 4000); // redirect after 4 seconds
+      }, 2000); 
 
       return () => clearTimeout(timer);
     }

@@ -8,8 +8,8 @@ const FormContainer = styled.div`
   max-width: 600px;
   margin: 3rem auto;
   padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 10px;
+  background: linear-gradient(to right,#fafafa, #7b7b7b);
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);`
 ;
 
@@ -17,7 +17,7 @@ const FormTitle = styled.h2`
   text-align: center;
   margin-bottom: 2rem;
   color: #333;
-  background-color: #f9f9f9;`
+  background-color: transparent;`
 ;
 
 const FormGroup = styled.div`
@@ -66,7 +66,7 @@ const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   &:hover {
-    background-color: #85714e;
+    background-color: #0178b8;
   }`
 ;
 

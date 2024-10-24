@@ -19,7 +19,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import Payment from './components/payments';
 import PurchaseTickets from './components/purchaseTickets';
 import TicketsPage from './components/TicketsPage';
-// import LusionScene from './components/LusionScene'; 
+import LusionScene from './components/LusionScene'; 
 // import LusionPage from './Pages/LusionScene/LusionPage';
 import Reviews from '../src/Pages/Reviews/Reviews';
 
@@ -45,6 +45,7 @@ function App() {
         <Route path="/myevents" element={<MyEvents />} />
         <Route path="/myevents/:eventID" element={<EventDetails />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/lusionscene" element={<LusionScene />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/events/:eventID" element={<DetailsCard />} />
         <Route path="/events/:eventID/register" element={<RegisterEvent />} />

@@ -202,8 +202,8 @@ h2{
   z-index: 1;
   display: flex;
   justify-content: space-between;
-  transition: transform 5.5s linear;
-  animation: slide 35s infinite linear;
+  transition: transform 8.5s linear;
+  animation: slide 65s infinite linear;
   align-items: center;
 
   .carousel-item {

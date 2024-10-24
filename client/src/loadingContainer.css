@@ -23,6 +23,11 @@
     width: 43px;
     height: 43px;
   }
+  .pl-normal{
+    width: 100vw;
+    height: 100vh;
+  }
+
   .pl__ring, .pl__ball {
     animation: ring 2s ease-out infinite;
   }

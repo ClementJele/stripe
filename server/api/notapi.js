@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 const Events = require("../models/event.models.js");
 const Notification = require("../models/notifications.models.js"); // Import Notification model
 
@@ -11,7 +12,7 @@ app.use(express.json());
 
 // Global Variables
 const PORT = process.env.PORT || 3004;
-const database = process.env.MONGO_DATABASE_CONNECT; // Make sure to set this in your .env
+const database = process.env.MONGO_DATABASE_CONNECT; //
 
 // Connect to MongoDB
 mongoose
@@ -38,7 +39,7 @@ const sendEmailNotification = async (event) => {
 
   const mailOptions = {
     from: process.env.EMAIL,
-    to: process.env.NOTIFY_EMAIL, // Email to notify
+    to: process.env.NOTIFY_EMAIL, 
     subject: 'Event Created Successfully',
     text: `You have created a new event: ${event.name} on ${event.date}.`
   };
@@ -46,15 +47,15 @@ const sendEmailNotification = async (event) => {
   await transporter.sendMail(mailOptions);
 };
 
-// Requests
+
 app.post('/api/events/create', async (req, res) => {
   try {
     const event = await Events.create(req.body);
 
-    // Send email notification
+   
     await sendEmailNotification(event);
 
-    // Create a notification after event creation
+    
     const notificationMessage = `New event created: ${event.name}`;
     await Notification.create({
       eventId: event._id,
@@ -73,7 +74,7 @@ const sendPushNotification = async (event) => {
       title: 'New Event Created',
       body: `Check out your new event: ${event.name}`,
     },
-    topic: 'events', // Subscribe clients to this topic
+    topic: 'events', 
   };
 
   await admin.messaging().send(message);

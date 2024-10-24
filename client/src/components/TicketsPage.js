@@ -7,6 +7,7 @@ import Sidebar from './sidebar';
 import { useNavigate } from 'react-router-dom';
 import LoadingAnimation from './loadingAnimation';
 
+
 const TicketsContainer = styled.div`
   max-width: 700px;
   margin: 2rem auto;
@@ -103,6 +104,60 @@ const MissingEventTitle = styled(EventTitle)`
 const MissingEventDetails = styled(EventDetails)`
   color: #fff;
 `;
+const loadingContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100vh', // Full vertical height of the screen
+  textAlign: 'center',
+};
+
+const loadingTextStyle = {
+  fontSize: '20px',
+  marginBottom: '20px',
+  color: '#333',
+};
+
+const CircleLoad = () => (
+  <svg className="pl-normal" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <linearGradient id="pl-grad1" x1="1" y1="0.5" x2="0" y2="0.5">
+      <stop offset="0%" stopColor="#f7f7f7" />
+      <stop offset="100%" stopColor="#484848" />
+    </linearGradient>
+    <linearGradient id="pl-grad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#f7f7f7" />
+      <stop offset="100%" stopColor="#484848" />
+    </linearGradient>
+
+    </defs>
+    <circle
+      className="pl__ring"
+      cx="100"
+      cy="100"
+      r="25"
+      fill="none"
+      stroke="url(#pl-grad1)"
+      strokeWidth="16"
+      strokeDasharray="0 257 1 257"
+      strokeDashoffset="0.01"
+      strokeLinecap="round"
+      transform="rotate(-90,100,100)"
+    />
+    <line
+      className="pl__ball"
+      stroke="url(#pl-grad2)"
+      x1="100"
+      y1="18"
+      x2="100.01"
+      y2="182"
+      strokeWidth="16"
+      strokeDasharray="1 165"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
 const TicketsPage = () => {
   const [tickets, setTickets] = useState([]);
@@ -168,12 +223,31 @@ const TicketsPage = () => {
   };
 
   if (loading) {
-    return <LoadingAnimation />;
+    
+    return (
+      <div className="DashboardContainer">
+        <Sidebar/>
+        <div className='ContentArea' style={loadingContainerStyle}>
+          <p style={loadingTextStyle}> Fetching Tickets... please wait</p>
+          <CircleLoad />
+        </div>
+      </div>
+    );
   }
 
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+    if (error) {
+      return (
+        <div className="DashboardContainer">
+          <Sidebar />
+            <div className="ContentArea">
+              <div className="error-message">
+                <p>Error: {error}</p>
+                <button onClick={() => navigate('/tickets')}>Return to Tickets</button>
+              </div>
+            </div>
+        </div>
+      );
+    }
 
   return (
     <div className='DashboardContainer'>
@@ -230,8 +304,7 @@ const TicketsPage = () => {
 export default TicketsPage;
 
 
-
-// import React, { useState, useEffect } from 'react';
+// import React from 'react';
 // import styled from 'styled-components';
 // import { QRCodeCanvas } from 'qrcode.react';
 // import '../globals.css';
@@ -251,6 +324,7 @@ export default TicketsPage;
 //   font-size: 1.8rem;
 //   margin-bottom: 1.5rem;
 //   color: #003b5b;
+//   background-color: transparent;
 // `;
 
 // const TicketCard = styled.div`
@@ -329,7 +403,7 @@ export default TicketsPage;
 //   // Sample data array
 //   const sampleTickets = [
 //     {
-//       registration: { eventID: '12345', userID: 'user1' },
+//       registration: { eventID: '12345', userID: 'Clement' },
 //       event: {
 //         name: 'Music Concert',
 //         description: 'A night filled with amazing performances.',
@@ -343,7 +417,7 @@ export default TicketsPage;
 //       price: 100
 //     },
 //     {
-//       registration: { eventID: '67890', userID: 'user2' },
+//       registration: { eventID: '67890', userID: 'Njabulo' },
 //       event: {
 //         name: 'Tech Conference',
 //         description: 'The latest in technology and innovation.',
@@ -357,7 +431,7 @@ export default TicketsPage;
 //       price: 200
 //     },
 //     {
-//       registration: { eventID: '54321', userID: 'user3' },
+//       registration: { eventID: '54321', userID: 'Molatelo' },
 //       event: {
 //         name: 'Art Exhibition',
 //         description: 'Showcasing modern art pieces from renowned artists.',
@@ -372,9 +446,9 @@ export default TicketsPage;
 //     }
 //   ];
 
-//   const handleBuyTicket = (ticketType, price) => {
-//     alert(`Buying a ${ticketType} ticket for ${price}!`);
-//     navigate('/payments');
+//   const handleBuyTicket = (ticket) => {
+//     // Navigate to the payment page and pass ticket data via location.state
+//     navigate('/payments', { state: { ticket } });
 //   };
 
 //   return (
@@ -401,8 +475,8 @@ export default TicketsPage;
 //                     <EventDetails><strong>Ticket Type:</strong> {ticket.type}</EventDetails>
 //                   )}
 //                   <TicketPrice>{ticket.price === 'Free' ? ticket.price : `R ${ticket.price}`}</TicketPrice>
-//                   {ticket.type && ticket.price !== 'Free' && (
-//                     <BuyButton onClick={() => handleBuyTicket(ticket.type, `R ${ticket.price}`)}>
+//                   {ticket.price !== 'Free' && (
+//                     <BuyButton onClick={() => handleBuyTicket(ticket)}>
 //                       Buy {ticket.type} Ticket
 //                     </BuyButton>
 //                   )}
