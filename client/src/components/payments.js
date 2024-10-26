@@ -33,10 +33,11 @@ export default function PaymentApp() {
       }
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_STRIPE}/create-payment-intent`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URI}/api/events/create-payment-intent`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'x-api-key': process.env.REACT_APP_API_KEY,
           },
           body: JSON.stringify({
             items: [{ id: ticket.event.name, amount: ticket.price * 100 }]

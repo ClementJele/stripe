@@ -4,3 +4,5 @@ ticketView.js
 purchaseTickets.js
 stripebackup.js
 LusionScene.js
+reviewapi.js
+stripeapi.js

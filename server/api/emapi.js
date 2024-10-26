@@ -6,6 +6,8 @@ app.use(cors()); // enforce cors later
 app.use(express.json());
 
 const Events = require("../models/event.models");
+const Review = require('../models/review.models'); 
+
 const Registration = require("../models/registration.models"); // Import Registration model
 const mongoose = require("mongoose");
 const apiKeyAuth = require('../Authorization/auth');
@@ -189,6 +191,166 @@ app.get('/api/user/:userID/tickets', async (req, res) => {
     res.status(200).json(registrations);
   } catch (error) {
     console.error("Error fetching tickets for user:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// app.post('/api/events/reviews', async (req, res) => {
+//   try {
+//     const { rating, feedback, userID } = req.body;
+
+    
+//     if (!rating || rating < 1 || rating > 5 || !feedback || !userID) {
+//       return res.status(400).json({ message: 'Invalid data provided' });
+//     }
+
+
+//     const newReview = new Review({
+//       rating,
+//       feedback,
+//       userID
+//     });
+
+ 
+//     const savedReview = await newReview.save();
+
+//     res.status(201).json({
+//       message: 'Review submitted successfully',
+//       review: savedReview
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error submitting review', error: error.message });
+//   }
+// });
+
+app.post('/api/events/reviews', async (req, res) => {
+  try {
+    const { rating, feedback, userID } = req.body;
+
+    // Validate input
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Invalid rating. Must be between 1 and 5.' });
+    }
+
+    if (!feedback || feedback.trim().length === 0) {
+      return res.status(400).json({ message: 'Feedback cannot be empty.' });
+    }
+
+    if (!userID) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    // Create new review
+    const newReview = new Review({
+      rating,
+      feedback,
+      userID
+    });
+
+    // Save to database
+    const savedReview = await newReview.save();
+
+    res.status(201).json({
+      message: 'Review submitted successfully',
+      review: savedReview
+    });
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    res.status(500).json({ 
+      message: 'Error submitting review', 
+      error: error.message 
+    });
+  }
+});
+
+
+// app.get('/api/reviews', async (req, res) => {
+//   try {
+//     const reviews = await Review.find(); 
+//     res.status(200).json(reviews);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching reviews', error: error.message });
+//   }
+// });
+
+app.get('/api/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .sort({ createdAt: -1 }); // Sort by newest first
+    
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ 
+      message: 'Error fetching reviews', 
+      error: error.message 
+    });
+  }
+});
+
+app.get('/api/reviews/user/:userID', async (req, res) => {
+  try {
+    const userID = req.params.userID;
+    const reviews = await Review.find({ userID })
+      .sort({ createdAt: -1 });
+    
+    if (!reviews.length) {
+      return res.status(404).json({ message: 'No reviews found for this user.' });
+    }
+    
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error('Error fetching user reviews:', error);
+    res.status(500).json({ 
+      message: 'Error fetching user reviews', 
+      error: error.message 
+    });
+  }
+});
+
+app.delete('/api/reviews/:reviewId', async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const deletedReview = await Review.findByIdAndDelete(reviewId);
+    
+    if (!deletedReview) {
+      return res.status(404).json({ message: 'Review not found.' });
+    }
+    
+    res.status(200).json({ message: 'Review deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).json({ 
+      message: 'Error deleting review', 
+      error: error.message 
+    });
+  }
+});
+
+app.post('/api/events/create-payment-intent', async (req, res) => {
+  try {
+    console.log('Received request:', req.body);
+
+    const { items } = req.body;
+
+    if (!items || !items.length) {
+      throw new Error('No items provided');
+    }
+    
+    const amountInCents = Math.round(items[0].amount *100);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: items[0].amount, 
+      currency: 'zar',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    
     res.status(500).json({ error: error.message });
   }
 });

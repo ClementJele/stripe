@@ -76,9 +76,9 @@ const Review = () => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
 
-  // Parse user object from sessionStorage
+
   const user = JSON.parse(sessionStorage.getItem('user')) || {};
-  const userID = user._id || null; // Safely get user._id
+  const userID = user._id || null; 
 
   console.log(userID, 'User ID');
   console.log(user, 'User Object');
@@ -91,11 +91,60 @@ const Review = () => {
     setFeedback(event.target.value);
   };
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  
+  //   if (!userID) {
+  //     alert('User not logged in!');
+  //     return;
+  //   }
+  
+  //   const reviewData = {
+  //     rating,
+  //     feedback,
+  //     userID,
+  //   };
+  
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_API_URI}/api/events/reviews`, // Update this line
+  //       reviewData,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'x-api-key': process.env.REACT_APP_API_KEY,
+  //         },
+  //       }
+  //     );
+  
+  //     if (response.status >= 200 && response.status < 300) {
+  //       console.log(response.data);
+  //       alert('Review submitted successfully!');
+  //       setRating(0);
+  //       setFeedback('');
+  //     } else {
+  //       alert('Failed to submit review');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     alert('An error occurred while submitting the review');
+  //   }
+  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     if (!userID) {
-      alert('User not logged in!');
+      alert('Please log in to submit a review');
+      return;
+    }
+  
+    if (rating === 0) {
+      alert('Please select a rating');
+      return;
+    }
+  
+    if (!feedback.trim()) {
+      alert('Please provide feedback');
       return;
     }
   
@@ -107,7 +156,7 @@ const Review = () => {
   
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_REVIEW}/api/reviews`,
+        `${process.env.REACT_APP_API_URI}/api/events/reviews`,
         reviewData,
         {
           headers: {
@@ -117,20 +166,17 @@ const Review = () => {
         }
       );
   
-      if (response.status >= 200 && response.status < 300) {
-        console.log(response.data);
-        alert('Review submitted successfully!');
-        setRating(0);
-        setFeedback('');
-      } else {
-        alert('Failed to submit review');
-      }
+      alert('Thank you for your feedback!');
+      setRating(0);
+      setFeedback('');
+      
+      // Optionally refresh the page or update the reviews list
+      // window.location.reload();
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while submitting the review');
+      console.error('Error submitting review:', error);
+      alert(error.response?.data?.message || 'Failed to submit review. Please try again.');
     }
   };
-  
 
   return (
     <div style={containerStyle}>
