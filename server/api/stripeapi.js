@@ -7,18 +7,18 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // Updated CORS configuration
 app.use(cors({
   origin: "http://localhost:3001",
-  methods: ["GET", "POST", "OPTIONS"],  // Added OPTIONS for preflight
+  methods: ["GET", "POST", "OPTIONS"],  
   credentials: true,
-  allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization']  // Added x-api-key explicitly
+  allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization']  
 }));
 
 app.use(express.static("public"));
 app.use(express.json());
 
-// Fixed route path - added leading slash
+
 app.post('/api/create-payment-intent', async (req, res) => {
   try {
-    // Verify API key
+
     const apiKey = req.headers['x-api-key'];
     if (!apiKey || apiKey !== process.env.REACT_APP_API_KEY) {
       return res.status(401).json({ error: 'Invalid API key' });
@@ -32,7 +32,7 @@ app.post('/api/create-payment-intent', async (req, res) => {
       throw new Error('No items provided');
     }
     
-    // Remove the additional multiplication since it's already in cents
+  
     const paymentIntent = await stripe.paymentIntents.create({
       amount: items[0].amount, 
       currency: 'zar',
