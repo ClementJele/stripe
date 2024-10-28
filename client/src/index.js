@@ -6,7 +6,7 @@ import App from './App';
 const root = createRoot(document.getElementById('root'));
 
 root.render(
-<Auth0Provider
+/* <Auth0Provider
     domain="personal-events.eu.auth0.com"
     clientId="HcubnyHUtZFDNYMdp6EkkF1jvxAKZIbM"
     authorizationParams={{
@@ -14,6 +14,6 @@ root.render(
     }}
   >
     <App />
-  </Auth0Provider>
-
+  </Auth0Provider>, */
+  <App />
 );

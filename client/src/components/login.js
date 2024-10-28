@@ -27,22 +27,22 @@ const postUser = async (name, email) => {
 }
 
 const Login =  () => {
-  const { user, loginWithRedirect, isAuthenticated } = useAuth0();
+  // const { user, loginWithRedirect, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
-  useEffect(() => {
+  // useEffect(() => {
     const handleLogin = async () => {
-      if (isAuthenticated) {
+      // if (isAuthenticated) {
         // Wait for postUser to finish before navigating
-        await postUser(user.name, user.email);
+        // await postUser(user.name, user.email);
         navigate('/home');
       }
-    };
+    // };
     handleLogin();
-  }, [isAuthenticated, user, navigate]);
+  // }, [isAuthenticated, user, navigate]);
   return (
     <div>
       {/* <h2>Welcome! Please log in.</h2> */}
-      <button onClick={() => loginWithRedirect()} className='Login'>Log In</button>
+      <button onClick={() => handleLogin()} className='Login'>Log In</button>
     </div>
   );
   

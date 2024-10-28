@@ -2,7 +2,10 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
-app.use(cors()); // enforce cors later
+// Allow requests from your frontend
+app.use(cors({
+  origin: 'http://localhost:3001', // Change this to your frontend URL
+})); // enforce cors later
 app.use(express.json());
 
 const Events = require("../models/event.models");
